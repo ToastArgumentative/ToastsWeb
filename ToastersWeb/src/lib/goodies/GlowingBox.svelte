@@ -6,8 +6,8 @@
     export let title = "";
     export let titleLink = "";
     export let text = 'Default Text';
-    export let hoverText = ''
     export let showFullText = false;
+
 
     export let downloadLink = '';
     export let downloadGoodOrBad = "good";
@@ -18,20 +18,6 @@
     export let bottom = 'auto';
     export let left = 'auto';
 
-    let tooltipX = 0;
-    let tooltipY = 0;
-    let showTooltip = false;
-
-    function handleMouseMove(event) {
-        tooltipX = event.clientX;
-        tooltipY = event.clientY - 50; // Position the tooltip 50px above the mouse
-        showTooltip = true;
-    }
-
-    function handleMouseLeave() {
-        showTooltip = false; // Hide the tooltip when the mouse leaves the box
-    }
-
 
     function toggleText(event) {
         if (event.type === 'click' || event.keyCode === 13 || event.keyCode === 32) {
@@ -39,9 +25,7 @@
         }
     }
 
-
-
-    function startDownload() {
+    function startDownload(event) {
         if (downloadLink !== '') {
             const link = document.createElement('a');
             link.href = downloadLink;
@@ -50,10 +34,13 @@
             link.click();
             document.body.removeChild(link);
         }
+        event.preventDefault(); // Prevent the default action for the keydown event
     }
 </script>
 
-<div class="glowing-box" role="button" tabindex="0" on:click={toggleText} on:keydown={toggleText}
+<div class="glowing-box" role="button" tabindex="0"
+     on:click={toggleText}
+     on:keydown={toggleText}
      style="top: {top}; right: {right}; bottom: {bottom}; left: {left}; position: fixed; max-width: {maxWidth};">
     <div class="title-download-wrapper">
         {#if title}
@@ -65,23 +52,22 @@
             {/if}
         {/if}
         {#if downloadLink}
-            <button on:click|stopPropagation={startDownload} class="download-button">
+            <button on:click|stopPropagation={startDownload} on:keydown|stopPropagation={event => (event.key === 'Enter' || event.key === ' ') && startDownload(event)} class="download-button">
                 {#if downloadGoodOrBad === "good"}
-                    <img src={DownloadButtonGreen} class="icon" alt="Download file!">
+                    <img src={DownloadButtonGreen} class="icon" alt="This archive is ready for production!">
                 {/if}
                 {#if downloadGoodOrBad === "bad"}
-                    <img src={DownloadButtonRed} class="icon" alt="Download file!">
+                    <img src={DownloadButtonRed} class="icon" alt="This archive is not production ready!">
                 {/if}
             </button>
         {/if}
-        {#if showTooltip}
-            <div class="tooltip" style="top: {tooltipY}px; left: {tooltipX}px;">{hoverText}</div>
-        {/if}
+
     </div>
     <div class="content-wrapper">
         {@html showFullText ? text : text.slice(0, 100) + '...'}
     </div>
 </div>
+
 
 <style>
     .glowing-box {
@@ -103,20 +89,6 @@
         word-wrap: break-word; /* Ensures long words do not cause overflow */
         z-index: 100; /* Ensure it's above other content */
         position: fixed; /* This is crucial for positioning */
-    }
-    .tooltip {
-        position: fixed;
-        padding: 5px 10px;
-        color: #ffffff;
-        background-color: rgba(0, 0, 0, 0.7);
-        border-radius: 5px;
-        font-size: 14px;
-        white-space: nowrap;
-        pointer-events: none; /* Prevents the tooltip from interfering with mouse events */
-        display: none; /* Initially hide the tooltip */
-    }
-    .glowing-box:hover .tooltip {
-        display: block; /* Show the tooltip on hover */
     }
     .glowing-box::-webkit-scrollbar {
         display: block;

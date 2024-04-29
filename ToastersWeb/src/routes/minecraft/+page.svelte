@@ -3,6 +3,7 @@
     import NavBar from "$lib/allsites/NavBar.svelte";
     import GlowingBox from "$lib/goodies/GlowingBox.svelte";
 
+
     const aboutMinecraft = ("This page will store all the information \n" +
         "relevant to the minecraft servers, plugins, and libraries.\n" +
         "The server aims to be a RPG based server with lots of things to " +
@@ -49,7 +50,7 @@
 
 />
 
-<GlowingBox text={aboutToasters} title="ToastersRPG: {toastersVersion}" hoverText={hoverToasters}
+<GlowingBox text={aboutToasters} title="ToastersRPG: {toastersVersion}"
 						top="335px" right="75px"
 						downloadLink={toastersrpg}
 						downloadGoodOrBad="bad"

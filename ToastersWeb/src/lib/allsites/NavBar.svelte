@@ -47,6 +47,8 @@
         <img src={Toaster} class="nav-icon" alt="Toaster" />
         <a href="/">Home</a>
         <a href="/minecraft/">Minecraft</a>
-
+    </div>
+    <div class ="nav-group">
+        <a href="/account/signin/">Sign In</a>
     </div>
 </nav>
